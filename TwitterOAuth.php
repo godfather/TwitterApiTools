@@ -29,13 +29,10 @@
  * USAGE2 - requiring access_token:
  * ------------------------------------------------------------
  * require_once('TwitterOAuth.php');
- * $params = array(
- *   'consumer_key' => 'CzjfOlzIhygpzyghj2bjnw',
- *   'consumer_secret' =>  'xxZPVGs98yinTMCQpUhEOMWREs0hvk0y8U22WVo',
- *   'oauth_callback_url' =>  'http://twitter.dev/callback.php',
- *   'oauth_token' => $_GET['oauth_token'],
- *   'oauth_verifier' => $_GET['oauth_verifier']
- * );
+ * $params = array('consumer_key'    => 'CONSUMER_KEY',
+ *                 'consumer_secret' =>  'CONSUMER_SECRET',
+ *                 'oauth_token'     => $_GET['oauth_token'],
+ *                 'oauth_verifier'  => $_GET['oauth_verifier']);
  * 
  * $twitter_oauth = new TwitterOAuth($params);
  * print_r($twitter_oauth->request_access_token());

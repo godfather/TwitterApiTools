@@ -57,6 +57,7 @@ class TwitterOAuth {
   public $composite_key;
   public $request_token_response;
   
+  //initialize the consumer data and callback url
   public function __construct($params = array()) {
     $default = array('consumer_key' => '', 'consumer_secret' => '', 'oauth_callback_url' => '', 'oauth_token' => NULL, 'oauth_verifier' => NULL);
     $params  = array_merge($default, $params);
@@ -69,6 +70,11 @@ class TwitterOAuth {
     $this->oauth_verifier     = $params['oauth_verifier'];
   }
   
+  /**
+   * create_oauth_params Return a array with twitter oauth parameters.
+   * this parameters will be used to build base string, base url access, 
+   * request authorization header, and request oauth token 
+  **/
   private function create_oauth_params() {
     return array('oauth_callback'         => $this->oauth_callback_url,
                  'oauth_consumer_key'     => $this->consumer_key,
@@ -149,13 +155,16 @@ class TwitterOAuth {
     foreach($parts as $p){ $p = explode('=', $p); $responseArray[$p[0]] = $p[1]; }
     $this->oauth_token = $responseArray['oauth_token'];
     $this->requests_token_response;
-    header("Location: http://api.twitter.com/oauth/authorize?oauth_token={$this->oauth_token}");
+    header("Location: http://api.twitter.com/oauth/authenticate?oauth_token={$this->oauth_token}&lang=pt");
   }
   
   public function request_access_token() {
     $this->oauth_params                    = $this->create_oauth_params();
     $this->oauth_params['oauth_signature'] = $this->build_base_string('GET')->get_composite_key()->generate_oauth_signature();
-    return file_get_contents(self::ACCESS_TOKEN_URL . '?' . $this->build_base_access_url());
+    $response                              = array();
+    $parts = explode('&', file_get_contents(self::ACCESS_TOKEN_URL . '?' . $this->build_base_access_url()));
+    foreach($parts as $p){ $p = explode('=', $p); $response[$p[0]] = $p[1]; }
+    return $response;
   }
 }
 ?>
